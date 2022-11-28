@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 
 export function Post({author, publishedAt ,content}) {
-    const [comments, setComments] = useState(['Post muito bom! Top 🎉'])
+    const [comments, setComments] = useState(['Post muito bom! Top 🎉!!', 'Top, parabéns'])
     const [newComment, setNewComment] = useState('')
 
     const publishedAtFormated = format(publishedAt,"dd 'de' LLLL 'às' HH:mm'h'",{locale: ptBR});
@@ -21,6 +21,10 @@ export function Post({author, publishedAt ,content}) {
 
     function handleNewCommentChange() {
          setNewComment(event.target.value);
+    }
+
+    function deleteComment(comment) {
+        console.log(`Deletar comentário: ${comment} ?`);
     }
 
     return (
@@ -40,10 +44,10 @@ export function Post({author, publishedAt ,content}) {
             <div className={styles.content}>
                 {content.map(paragraph => {
                     if(paragraph.type =='paragraph'){
-                        return  <p>{paragraph.content}</p>
+                        return  <p key={paragraph.content}>{paragraph.content}</p>
                     }
                     else {
-                        return  <p><a href="">{paragraph.content}</a></p>
+                        return  <p  key={paragraph.content} ><a href="">{paragraph.content}</a></p>
                     }
                 })}
             </div>
@@ -61,10 +65,13 @@ export function Post({author, publishedAt ,content}) {
             </form>
             <div className={styles.commentList}>
                 {comments.map(comment => {
-                    return <Comment 
-                                key={comment}
-                                content={comment} 
-                            />
+                    return (
+                        <Comment 
+                            key={comment}
+                            content={comment} 
+                            onDeleteComment={deleteComment}
+                        />
+                    )
                 })}
             </div>
         </article>
